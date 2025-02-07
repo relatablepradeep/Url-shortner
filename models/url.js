@@ -1,6 +1,7 @@
 const mongoose =require('mongoose');
 
 
+
 const urlSchema=new mongoose.Schema(
     {
         //short url
@@ -30,6 +31,6 @@ const urlSchema=new mongoose.Schema(
 );
 
 
-const URL =mongoose.model('url',urlSchema);
+const URL =mongoose.model('URL',urlSchema);
 
-module.export=URL;
+module.exports=URL;

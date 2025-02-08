@@ -15,7 +15,23 @@ async function generateshorturl(req, res) {
         visitedHistory: [],
     });
 
-    return res.json({ id: shortID });
+    return res.render('home',
+        { id: shortID, }
+    );
+
+
+
+
 }
 
-module.exports = { generateshorturl };
+
+
+async function time(req,res){
+    const ShortId=req.params.ShortId;
+    const result=await URL.findOne({ShortId})
+
+
+    return res.json({totalClicks:result.visitHistory.length,analytics:result.visitHistory})
+}
+
+module.exports = { generateshorturl ,time};

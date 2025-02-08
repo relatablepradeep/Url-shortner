@@ -1,15 +1,26 @@
-const express = require("express");
+const express =require('express')
+
 const dotenv = require("dotenv");
 const urlRoute = require('./routes/url');
 const connecttomongo = require('./connect');
+const URL=require('./models/url')
+const path =require('path');
+const staticroute=require('./routes/staticroute')
 
-// Load environment variables at the top
+
+
 dotenv.config();
 
 const app = express();
 
-// Connect to MongoDB with error handling
-connecttomongo('mongodb://localhost:27017/Short-Url')
+
+
+const mongoport = process.env.mongoport;
+
+// Connect to MongoDB 
+
+
+connecttomongo(`mongodb://localhost:${mongoport}/Short-Url`)
     .then(() => {
         console.log("MongoDB is connected");
     })
@@ -18,18 +29,55 @@ connecttomongo('mongodb://localhost:27017/Short-Url')
     });
 
 
+
+
+    app.set("view engine","ejs");
+    app.set("views",path.resolve("./views"))
+
+
+
     app.use(express.json())
 
-// Fix incorrect route path
+    //to parse form data
+    
+    app.use(express.urlencoded({ extended: false }));
+
+
+
+
+
+
+
 app.use('/url', urlRoute);
 
-app.get('/', (req, res) => {
-    res.send("Short URL service is running!");
+app.use('/',staticroute)
+
+app.get('/:ShortId',async (req,res)=>{
+
+    const ShortId=req.params.ShortId;
+    const entry = await  URL.findOneAndUpdate({
+
+        ShortId
+
+    },
+    {$push:
+        {
+        visitHistory:{
+            timestamp:Date.now(),
+        },
+    }
+}
+);
+
+res.redirect(entry.RedirectURL)
+
 });
 
-// Use a default port if process.env.Port is undefined
-const Port = process.env.Port || 5000;
+
+
+
+const Port = process.env.Port 
 
 app.listen(Port, () => {
     console.log(`Server is running on port ${Port}`);
-});
+});   

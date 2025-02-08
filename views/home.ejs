@@ -3,30 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Url-shortner page</title>
+    <title>URL Shortener Page</title>
 </head>
 <body>
 
-    <h1>Url-Shortner</h1>
+    <h1>URL Shortener</h1>
 
-    <% if(locals.id){
-        %>
-
-        <p>Url Generated: http://localhost:5000/<%=id %>
-         </p>
-
-
-        <%
-    } %>
+    <% if (locals.id) { %>
+        <p>URL Generated: 
+            <a href="http://localhost:5000/<%= locals.id %>" target="_blank">
+                http://localhost:5000/url/<%= locals.id %>
+            </a>
+        </p>
+    <% } %>
 
     <div>
         <form method="POST" action="/url">
-            <label>Url</label>
-            <input Type="'text" name="url" placeholder="Enter you Url"/>
-
+            <label>Enter URL:</label>
+            <input type="text" name="url" placeholder="Enter your URL" required />
             <button type="submit">Submit</button>
-
         </form>
+    </div>
+
+    <div>
+        <% if (locals.urls) { %>
+            <table border="1">
+               <thead>
+                   <tr>
+                       <th>S.No</th>
+                       <th>Short ID</th>
+                       <th>Redirect</th>
+                       <th>Clicks</th>
+                   </tr>
+               </thead>
+
+               <tbody>
+                <% urls.forEach((url, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= url.ShortId %></td>
+                        <td><a href="/url/<%= url.ShortId %>" target="_blank">Visit</a></td>
+                        <td><%= url.visitHistory.length %></td>
+                    </tr>
+                <% }) %>
+               </tbody>
+            </table>
+        <% } %>
     </div>
     
 </body>

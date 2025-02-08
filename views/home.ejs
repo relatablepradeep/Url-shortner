@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Url-shortner page</title>
+</head>
+<body>
+
+    <h1>Url-Shortner</h1>
+
+    <% if(locals.id){
+        %>
+
+        <p>Url Generated: http://localhost:5000/<%=id %>
+         </p>
+
+
+        <%
+    } %>
+
+    <div>
+        <form method="POST" action="/url">
+            <label>Url</label>
+            <input Type="'text" name="url" placeholder="Enter you Url"/>
+
+            <button type="submit">Submit</button>
+
+        </form>
+    </div>
+    
+</body>
+</html>

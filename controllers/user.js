@@ -1,5 +1,6 @@
 const User=require('../models/user')
-import { v4 as uuidv4 } from 'uuid';
+const {setUser,getUser} =require('../service/auth')
+const { v4: uuidv4 } =require('uuid');
 
 
 async  function userSignup(req,res){
@@ -34,6 +35,9 @@ async  function userlogin(req,res){
 
 
    const sessionID=uuidv4();
+
+   setUser(sessionID,user);
+   res.cookie('uid',sessionID);
 
 
 

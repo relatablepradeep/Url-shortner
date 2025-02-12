@@ -1,12 +1,14 @@
 const express = require('express')
 const dotenv = require("dotenv");
+const cookie=require('cookie-parser')
 const urlRoute = require('./routes/url');
 const connecttomongo = require('./connect');
 const URL = require('./models/url')
 const path = require('path');
 const staticroute = require('./routes/staticroute')
 const userRoute = require('./routes/user');
-const { userSignup } = require('./controllers/user');
+
+const {restrictTologgedinuseronly}=require('./middlewear/auth')
 
 
 
@@ -34,11 +36,13 @@ app.set("views", path.resolve("./views"))
 
 
 app.use(express.json())
+app.use(cookie())
 //to parse form data
 app.use(express.urlencoded({ extended: false }));
 
 
-app.use('/url', urlRoute);
+
+app.use('/url',restrictTologgedinuseronly, urlRoute);   //inline middlewear it work only when the request come in /url
 app.use('/user', userRoute);
 app.use('/', staticroute);
 

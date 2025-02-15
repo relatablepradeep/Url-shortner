@@ -8,7 +8,7 @@ const path = require('path');
 const staticroute = require('./routes/staticroute')
 const userRoute = require('./routes/user');
 
-const {restrictTologgedinuseronly}=require('./middlewear/auth')
+const {restrictTologgedinuseronly,checkAuth}=require('./middlewear/auth')
 
 
 
@@ -34,17 +34,19 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"))
 
 
-
-app.use(express.json())
 app.use(cookie())
+app.use(express.json())
+
 //to parse form data
 app.use(express.urlencoded({ extended: false }));
 
 
 
+
+
 app.use('/url',restrictTologgedinuseronly, urlRoute);   //inline middlewear it work only when the request come in /url
 app.use('/user', userRoute);
-app.use('/', staticroute);
+app.use('/',checkAuth, staticroute);
 
 
 
